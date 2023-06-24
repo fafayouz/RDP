@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RDP Control Panel</title>
+</head>
+<body>
+  <h1>RDP Control Panel</h1>
+  <ul id="serverList"></ul>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    // استلام قائمة السيرفرات من الخادم
+    socket.on('servers', (servers) => {
+      const serverList = document.getElementById('serverList');
+      servers.forEach((server) => {
+        const li = document.createElement('li');
+        const link = document.createElement('a');
+        link.textContent = server.name;
+        link.href = '#';
+        link.addEventListener('click', () => openLink(server));
+        li.appendChild(link);
+        serverList.appendChild(li);
+      });
+    });
+
+    // إرسال أمر فتح الرابط إلى الخادم
+    function openLink(server) {
+      const link = 'https://google.com'; // احل مكان example.com برابط الصفحة المراد فتحها
+      socket.emit('openLink', link);
+    }
+  </script>
+</body>
+</html>
